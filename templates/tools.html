@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebWiz Tools</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      background: linear-gradient(135deg, #1b2a49, #3a2b58, #0c1027);
+      background-size: 600% 600%;
+      animation: gradientBG 20s ease infinite;
+      overflow: hidden;
+      display: flex;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      color: #fff;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .menu {
+      display: flex;
+      gap: 20px;
+    }
+
+    .menu a {
+      color: #e0e7ff;
+      text-decoration: none;
+      padding: 8px 15px;
+      border-radius: 10px;
+      transition: 0.3s ease;
+    }
+
+    .menu a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      padding: 30px 20px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+      position: absolute;
+      left: -240px;
+      transition: left 0.3s ease;
+      z-index: 1;
+    }
+
+    .sidebar.active {
+      left: 0;
+    }
+
+    .sidebar h2 {
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .sidebar h2::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #a855f7, #38bdf8);
+      bottom: -6px;
+      left: 0;
+      border-radius: 4px;
+      animation: slideIn 2s ease-in-out;
+    }
+
+    @keyframes slideIn {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    .sidebar a {
+      color: #e0e7ff;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      transition: 0.3s ease;
+    }
+
+    .sidebar a:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateX(10px);
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 60px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .glass-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      color: white;
+      text-align: center;
+    }
+
+    .glass-container h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .glass-container h1::after {
+      content: '';
+      position: absolute;
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(90deg, #93c5fd, #e0e7ff);
+      bottom: -10px;
+      left: 20%;
+      border-radius: 4px;
+    }
+
+    .glass-container p {
+      font-size: 1.1rem;
+      color: #e2e8f0;
+      margin: 30px 0;
+    }
+
+    .tools-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .tools-list button {
+      background: linear-gradient(135deg, #60a5fa, #818cf8);
+      border: none;
+      padding: 15px;
+      border-radius: 15px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .tools-list button:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Falling Stars */
+    .star {
+      position: absolute;
+      top: -10px;
+      width: 2px;
+      height: 2px;
+      background-color: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) translateX(100px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo" onclick="toggleSidebar()">WebWiz✨</div>
+    <div class="menu">
+      <a href="/about">About Us</a>
+      <a href="/how-it-works">How It Works</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </header>
+
+  <div class="sidebar">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/settings">Settings</a>
+    <a href="/tools">Tools</a>
+  </div>
+
+  <div class="main-content">
+    <div class="glass-container">
+      <h1>Productivity Tools</h1>
+      <p>Boost your browser experience with our smart tools:</p>
+      <div class="tools-list">
+        <button>View Session History</button>
+        <button>Clear History</button>
+        <button>Export Usage Report</button>
+        <button>Time Tracker</button>
+        <button>Focus Mode</button>
+        <button>Manage Tabs</button>
+        <button>Customize Layout</button>
+        <button>Dark Mode Toggle</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const starsCount = 150;
+    for (let i = 0; i < starsCount; i++) {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      star.style.left = `${Math.random() * 100}vw`;
+      star.style.animationDuration = `${2 + Math.random() * 4}s`;
+      star.style.animationDelay = `${Math.random() * 4}s`;
+      document.body.appendChild(star);
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WebWiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body 
+    {
+      font-family: 'Times New Roman', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      background-color: #000;
+    }
+
+    .navbar 
+    {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      z-index: 1000;
+    }
+
+    .logo img 
+    {
+      height: 40px;
+    }
+
+    .nav-links 
+    {
+        text-decoration:underline;
+        display: flex;
+        gap: 30px;
+    }
+
+    .nav-links a 
+    {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s ease;
+    }
+
+    .nav-links a:hover 
+    {
+      color: #4facfe;
+      text-decoration: underline;
+    }
+
+    .skyline 
+    {
+      background: url('../static/images/land.gif') no-repeat center center fixed;
+      background-size: cover;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 2s ease;
+    }
+
+    .content 
+    {
+      text-align: center;
+      z-index: 2;
+      animation: floatUp 1.5s ease;
+    }
+
+    .content h2 
+    {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+    }
+
+    .content p 
+    {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+
+    .content h3 
+    {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+
+    .btn 
+    {
+      background: #4facfe;
+      border: none;
+      padding: 12px 30px;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.4s ease, background 0.4s ease;
+      box-shadow: 0 0 12px rgba(79, 172, 254, 0.6);
+    }
+
+    .btn:hover
+    {
+      transform: scale(1.08);
+      background: #1e90ff;
+    }
+
+    .ripple-overlay
+    {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, #1e90ff 10%, #070720 70%);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      animation: rippleFade 1s ease forwards;
+    }
+
+    @keyframes rippleFade
+    {
+      0%
+      {
+        transform: scale(0);
+        opacity: 1;
+      }
+      100%
+      {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn 
+    {
+      from 
+      {
+        opacity: 0;
+      }
+      to
+      {
+        opacity: 1;
+      }
+    }
+
+    @keyframes floatUp
+    {
+      0%
+      {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100%
+      {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #get-started
+    {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 20px 60px;
+      background: url('../static/images/steps.jpg') no-repeat center center fixed;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+
+    #get-started::before
+    {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
+
+    #get-started h2
+    {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 40px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .step-cards
+    {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      z-index: 1;
+      position: relative;
+    }
+
+    .card
+    {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      width: 250px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .card:hover
+    {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 32px rgba(79, 172, 254, 0.4);
+    }
+
+    .card h3
+    {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .card p
+    {
+      font-size: 1rem;
+      color: #eee;
+    }
+
+    .dive-btn {
+      display: inline-block;
+      padding: 12px 25px;
+      background-color: #4facfe;
+      color: #fff;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 18px;
+      position: relative;
+      text-decoration: none;
+      overflow: hidden;
+      transition: background 0.4s ease, transform 0.4s ease;
+      box-shadow: 0 0 12px rgba(79, 172, 254, 0.6);
+    }
+    
+    .dive-btn:hover {
+      background-color: #1e90ff;
+      transform: scale(1.08);
+    }
+    
+    .dive-btn::before, .dive-btn::after {
+      content: "✨";
+      position: absolute;
+      font-size: 16px;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .dive-btn::before {
+      top: -10px;
+      left: 10%;
+    }
+    
+    .dive-btn::after {
+      bottom: -10px;
+      right: 10%;
+    }
+    
+    .dive-btn:hover::before,.dive-btn:hover::after {
+      opacity: 1;
+      transform: translateY(10px);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">
+      <h2>WEBWIZ✨</h2>
+    </div>
+    <nav class="nav-links">
+      <a href="#about">About Us</a>
+      <a href="#l">How it works</a>
+    </nav>
+  </header>
+
+  <div class="skyline">
+    <div class="content">
+      <h2>Lost in a Galaxy of Tabs?</h2>
+      <p>Your digital mind deserves better.<br>Track. Manage. Navigate — like a pro.</p>
+      <h3>Welcome to WebWiz</h3>
+      <button class="btn" onclick="triggerRipple()">▶ Get Started</button>
+    </div>
+  </div>
+
+  <div id="ripple" class="ripple-overlay"></div>
+
+  <section id="get-started">
+    <h2>Your Journey Starts Here</h2>
+    <div class="step-cards">
+      <div class="card">
+        <h3>Step 1</h3>
+        <p>Browse normally. We track your history visually in real-time.</p>
+      </div>
+      <div class="card">
+        <h3>Step 2</h3>
+        <p>Use the wizard to revisit, search, or jump through your path.</p>
+      </div>
+      <div class="card">
+        <h3>Step 3</h3>
+        <p>Save or delete paths. Stay in control of your digital mind.</p>
+      </div>
+    </div>
+    <div class="dive-btn">
+      <a href="/login">
+        <button>Dive In</button>
+      </a>
+    </div>
+  </section>
+
+  <script>
+    function triggerRipple() {
+      const ripple = document.getElementById('ripple');
+      ripple.style.display = 'block';
+      ripple.classList.remove('animate');
+      void ripple.offsetWidth;
+      ripple.classList.add('animate');
+      ripple.style.animation = 'rippleFade 1s ease forwards';
+
+      setTimeout(() => {
+        ripple.style.display = 'none';
+        document.getElementById('get-started').scrollIntoView({ behavior: 'smooth' });
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
+
+

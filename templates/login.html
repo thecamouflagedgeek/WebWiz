@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Glass Vibes</title>
+  <style>
+    /* 🔒🔥 Unbothered, untouched CSS 🔥🔒 */
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      background: url('../static/images/login.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 40px;
+      width: 350px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      color: white;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button[type="submit"] {
+      background-color: white;
+      color: black;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #ddd;
+    }
+
+    #google-login {
+      background-color: #4285F4;
+      color: white;
+    }
+
+    #google-login:hover {
+      background-color: #357ae8;
+    }
+
+    .divider {
+      margin: 20px 0;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .flash-message {
+      margin-top: 10px;
+      padding: 8px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .error {
+      border-left: 4px solid #f44336;
+    }
+
+    .info {
+      border-left: 4px solid #2196f3;
+    }
+
+    .warning {
+      border-left: 4px solid #ffc107;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glass-card">
+    <h2>Login</h2>
+
+    <!-- Flask flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Dummy database login form -->
+    <form method="POST" action="/login">
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="divider">OR</div>
+
+    <!-- Google Sign-in Button (hands off 😇) -->
+    <button id="google-login">Sign in with Google</button>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAiKLXMALEVMO2SAJNh_xJNraOOmHo1uIY",
+      authDomain: "webwiz-ed46a.firebaseapp.com",
+      projectId: "webwiz-ed46a",
+      storageBucket: "webwiz-ed46a.appspot.com",
+      messagingSenderId: "953132636835",
+      appId: "1:953132636835:web:3cd70d0763b1a67769bd16",
+      measurementId: "G-K4ZVPQXP6S"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    document.getElementById("google-login").addEventListener("click", () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(result => {
+          const user = result.user;
+          alert(`Welcome, ${user.displayName}!`);
+        })
+        .catch(error => {
+          alert("Google login failed: " + error.message);
+        });
+    });
+  </script>
+</body>
+</html>
+

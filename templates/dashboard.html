@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebWiz Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      font-family: 'Times New Roman', Times, serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: url('../static/images/cloud.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      width: 100%;
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    header h1:hover {
+      transform: scale(1.05);
+    }
+
+    .header-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .header-links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .header-links a:hover {
+      color: #ddd;
+    }
+
+    .sidebar {
+      width: 220px;
+      height: 100vh;
+      background-color: #111;
+      position: fixed;
+      top: 0;
+      left: -220px;
+      padding: 5rem 1rem 1rem;
+      transition: left 0.3s ease;
+      z-index: 99;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin: 20px 0;
+    }
+
+    .sidebar ul li a {
+      color: #bbb;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .sidebar ul li a:hover {
+      color: #fff;
+    }
+
+    .main {
+      padding: 6rem 2rem 2rem;
+      transition: margin-left 0.3s ease;
+    }
+
+    .sidebar.open ~ .main {
+      margin-left: 220px;
+    }
+
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      color: #000;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .analytics-section {
+      display: none;
+      flex-wrap: wrap;
+      gap: 2rem;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chart-small {
+      width: 400px;
+      height: 300px;
+    }
+
+    .analytics-content {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      color: #000;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      width: 300px;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.35);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 onclick="toggleSidebar()">WebWiz✨</h1>
+  <div class="header-links">
+    <a href="#">About Us</a>
+    <a href="#">How It Works</a>
+    <a href="/logout">Logout</a>
+  </div>
+</header>
+
+<div class="sidebar" id="sidebar">
+  <ul>
+    <li><a href="#" onclick="navigateTo('Dashboard')">Dashboard</a></li>
+    <li><a href="#" onclick="navigateTo('Settings')">Settings</a></li>
+    <li><a href="#" onclick="navigateTo('Tools')">Tools</a></li>
+  </ul>
+</div>
+
+<div class="main" id="mainContent">
+  <h2 style="color: #fff;">Hello,Hazel</h2>
+
+  <div class="dashboard-cards">
+    <div class="card">
+      <h3>Analytics</h3>
+      <p>View your activity and site trends.</p>
+      <button class="btn" onclick="toggleAnalytics()">Toggle Analytics</button>
+    </div>
+    <div class="card">
+      <h3>Used Time</h3>
+      <p>{{ used_time }}</p>
+    </div>
+    <div class="card">
+      <h3>Saved Sessions</h3>
+      <p>{{ saved_sessions }}</p>
+    </div>
+    <div class="card">
+      <h3>Insights</h3>
+      <p>{{ insights }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Navigation History</h3>
+      <p id="currentTab">Current Tab: Home</p>
+      <button class="btn" onclick="goBack()">⬅️ Back</button>
+      <button class="btn" onclick="goForward()">➡️ Forward</button>
+      <ul id="navList" style="margin-top: 10px;"></ul>
+    </div>
+  </div>
+
+  <div class="analytics-section" id="analyticsSection">
+    <div class="card chart-small">
+      <h3 style="margin-top: 0;">Website Usage</h3>
+      <canvas id="usageChart" width="350" height="250"></canvas>
+    </div>
+    <div class="analytics-content">
+      <h3>Stats</h3>
+      <ul>
+        <li><strong>Tabs Used:</strong> {{ tabs_used }}</li>
+        <li><strong>Most Visited:</strong> {{ most_visited }}</li>
+        <li><strong>Average Time/Tab:</strong> {{ average_time }}</li>
+        <li><strong>Longest Session:</strong> {{ longest_session }}</li>
+        <li><strong>Least Used:</strong> {{ least_used }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  // CHART.JS LOGIC
+  const chartLabels = JSON.parse('{{ labels | tojson | safe }}') || [];
+  const chartData = JSON.parse('{{ data | tojson | safe }}') || [];
+
+  const ctx = document.getElementById('usageChart').getContext('2d');
+  const usageChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        label: 'Hours',
+        data: chartData,
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        borderColor: '#000',
+        borderWidth: 1.5,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: false,
+      scales: {
+        y: { beginAtZero: true, ticks: { color: '#000' } },
+        x: { ticks: { color: '#000' } }
+      },
+      plugins: {
+        legend: {
+          labels: { color: '#000' }
+        }
+      }
+    }
+  });
+
+  // SIDEBAR TOGGLE
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // ANALYTICS SECTION TOGGLE
+  function toggleAnalytics() {
+    const section = document.getElementById('analyticsSection');
+    section.style.display = section.style.display === 'flex' ? 'none' : 'flex';
+  }
+
+  // 🧠 DOUBLY LINKED LIST LOGIC FOR NAVIGATION HISTORY
+  class Node {
+    constructor(data) {
+      this.data = data;
+      this.prev = null;
+      this.next = null;
+    }
+  }
+
+  class NavigationHistory {
+    constructor() {
+      this.head = null;
+      this.tail = null;
+      this.current = null;
+    }
+
+    add(tab) {
+      const newNode = new Node(tab);
+      if (this.head === null) {
+        this.head = this.tail = this.current = newNode;
+      } else {
+        if (this.current && this.current.next) {
+          this.current.next.prev = null;
+          this.current.next = null;
+          this.tail = this.current;
+        }
+        this.current.next = newNode;
+        newNode.prev = this.current;
+        this.current = newNode;
+        this.tail = newNode;
+      }
+      this.updateDisplay();
+    }
+
+    goBack() {
+      if (this.current && this.current.prev) {
+        this.current = this.current.prev;
+        this.updateDisplay();
+      }
+    }
+
+    goForward() {
+      if (this.current && this.current.next) {
+        this.current = this.current.next;
+        this.updateDisplay();
+      }
+    }
+
+    updateDisplay() {
+      document.getElementById("currentTab").textContent = "Current Tab: " + this.current.data;
+      let navList = document.getElementById("navList");
+      navList.innerHTML = "";
+      let temp = this.head;
+      while (temp) {
+        const li = document.createElement("li");
+        li.textContent = temp.data;
+        if (temp === this.current) {
+          li.style.fontWeight = "bold";
+          li.style.color = "black";
+        }
+        navList.appendChild(li);
+        temp = temp.next;
+      }
+    }
+  }
+  const history = new NavigationHistory();
+  history.add("Home");
+
+  function navigateTo(tabName) {
+    history.add(tabName);
+  }
+
+  function goBack() {
+    history.goBack();
+  }
+
+  function goForward() {
+    history.goForward();
+  }
+</script>
+
+</body>
+</html>
+

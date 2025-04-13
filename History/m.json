@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "My History Viewer",
+    "version": "1.0",
+    "description": "A simple extension to read browser history",
+    "permissions": ["history"],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "icon.png"
+    }
+  }
+  
