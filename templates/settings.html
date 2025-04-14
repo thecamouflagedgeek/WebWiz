@@ -12,17 +12,18 @@
             box-sizing: border-box;
         }
 
-        body {
+        body 
+        {
             font-family: 'Times New Roman', Times, serif;
             background: linear-gradient(135deg, #1b2a49, #3a2b58, #0c1027);
             background-size: 600% 600%;
             animation: gradientBG 20s ease infinite;
             color: white;
             overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            display: block;
+            min-height: 100vh;
         }
+
 
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
@@ -122,17 +123,19 @@
             color: white;
         }
         
-        .container {
-        margin-top: 150px; 
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 30px;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    }
+        .container 
+        {
+            margin: 120px auto 100px; /* Top offset for header + center horizontally + bottom padding */
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+
 
         h1 {
             text-align: center;
